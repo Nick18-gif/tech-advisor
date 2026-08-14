@@ -33,8 +33,8 @@
 <body>
 
   <div class="container">
-    <h1>Tech Upgrade Advisor</h1>
-    <p class="subtitle">Scopri se è ora di cambiare il tuo dispositivo e cosa acquistare con il tuo budget.</p>
+    <h1>Tech Upgrade Device Advisor</h1>
+    <p class="subtitle">Scopri se è ora di cambiare il tuo dispositivo e cosa comprare con il tuo budget.</p>
 
     <form id="techForm">
       <div class="form-group">
@@ -55,7 +55,7 @@
 
       <div class="form-group">
         <label for="year">Anno di acquisto (approssimativo)</label>
-        <input type="number" id="year" placeholder="Es. 2019" min="1988" max="2026" required>
+        <input type="number" id="year" placeholder="Es. 2019" min="2000" max="2026" required>
       </div>
 
       <div class="form-group">
@@ -84,7 +84,7 @@
         { maxBudget: 150, options: ["Redmi Note 13", "POCO M6"] },
         { maxBudget: 300, options: ["Samsung Galaxy A35", "Nothing Phone (2a)", "Redmi Note 13 Pro"] },
         { maxBudget: 600, options: ["Google Pixel 8a", "Samsung Galaxy S23", "Xiaomi 13T"] },
-        { maxBudget: Infinity, options: ["iPhone 15", "Samsung Galaxy S24 Ultra", "Google Pixel 9 Pro"] }
+        { maxBudget: Infinity, options: ["iPhone 15", "Samsung Galaxy S24 Ultra", "Google Pixel 11 Pro"] }
       ],
       tablet: [
         { maxBudget: 150, options: ["Redmi Pad SE", "Lenovo Tab M11"] },
@@ -126,20 +126,21 @@
       let description = '';
 
       if (age <= 2) {
-        statusText = 'Puoi Tenerlo!';
+        statusText = 'É Ancora Buono!';
         statusClass = 'status-keep';
-        title = `${model} è ancora molto valido`;
-        description = `Ha circa ${age} anni. Riceve probabilmente ancora aggiornamenti ed ha prestazioni adeguate per la maggior parte delle attività. Ti consigliamo di tenerlo ancora.`;
+        title = `${model} è molto valido`;
+        description = `Ha circa ${age} anni. Riceve probabilmente ancora aggiornamenti ed ha prestazioni adeguate per la maggior parte delle attività. Ti consigliamo di tenerlo ancora
+        ma se lo vuoi rivendere il prezzo potrebbe essere molto alto.`;
       } else if (age <= 4) {
-        statusText = 'Valuta un upgrade';
+        statusText = 'Valuta uno nuovo';
         statusClass = 'status-upgrade';
         title = `${model} inizia a mostrare i suoi anni`;
-        description = `Con ${age} anni di servizio, la batteria o il supporto software potrebbero iniziare a mostrare i limiti. Se noti rallentamenti, può valere la pena cambiarlo.`;
+        description = `Con ${age} anni/o di servizio, la batteria o il supporto software potrebbero iniziare a mostrare i limiti. Se noti rallentamenti o spegnimenti improvvisi, può valere la pena cambiarlo ma se gli aggiornamenti vanno ancora potresti ancora tenerlo.`;
       } else {
-        statusText = 'Consigliata sostituzione';
+        statusText = 'consiglio la sostituzione';
         statusClass = 'status-replace';
         title = `${model} è da sostituire`;
-        description = `Un dispositivo di ${age} anni è ormai superato per aggiornamenti di sicurezza, batteria e prestazioni generali. Un cambio ti darà un netto salto di qualità.`;
+        description = `Un dispositivo di ${age} anni è ormai superato per aggiornamenti di sicurezza, batteria e prestazioni generali. Cambiarlo ti darà un grande salto di qualità.`;
       }
 
       resultCard.style.display = 'block';
