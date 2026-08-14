@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Upgrade Advisor - Valuta il tuo Dispositivo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f7f6; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .container { background-color: #ffffff; padding: 30px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); max-width: 550px; width: 100%; }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; color: #111; text-align: center; }
+    p.subtitle { font-size: 0.95rem; color: #666; text-align: center; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+    select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    select:focus, input:focus { border-color: #0066cc; }
+    button { width: 100%; padding: 14px; background-color: #0066cc; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
+    button:hover { background-color: #0052a3; }
+    .result-card { margin-top: 24px; padding: 20px; border-radius: 12px; display: none; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 12px; text-transform: uppercase; }
+    .status-keep { background-color: #e6f4ea; color: #137333; }
+    .status-upgrade { background-color: #feefc3; color: #b06000; }
+    .status-replace { background-color: #fce8e6; color: #c5221f; }
+    .result-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+    .result-card p { font-size: 0.95rem; line-height: 1.5; color: #444; margin-bottom: 12px; }
+    .recommendations { margin-top: 12px; background: rgba(255, 255, 255, 0.7); padding: 12px; border-radius: 8px; border-left: 4px solid #0066cc; }
+    .recommendations h4 { font-size: 0.95rem; margin-bottom: 6px; }
+    .recommendations ul { list-style: none; }
+    .recommendations li { font-size: 0.9rem; padding: 4px 0; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Tech Upgrade Advisor</h1>
+    <p class="subtitle">Scopri se è ora di cambiare il tuo dispositivo e cosa acquistare con il tuo budget.</p>
+
+    <form id="techForm">
+      <div class="form-group">
+        <label for="category">Tipo di Dispositivo</label>
+        <select id="category" required>
+          <option value="" disabled selected>Seleziona una categoria</option>
+          <option value="smartphone">Smartphone</option>
+          <option value="tablet">Tablet</option>
+          <option value="speaker">Cassa Bluetooth / Audio</option>
+          <option value="smartwatch">Smartwatch</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="model">Modello esatto</label>
+        <input type="text" id="model" placeholder="Es. Huawei P30 Lite, Redmi Pad, Sony XB12..." required>
+      </div>
+
+      <div class="form-group">
+        <label for="year">Anno di acquisto (approssimativo)</label>
+        <input type="number" id="year" placeholder="Es. 2019" min="2000" max="2026" required>
+      </div>
+
+      <div class="form-group">
+        <label for="budget">Il tuo Budget (€)</label>
+        <input type="number" id="budget" placeholder="Es. 250" min="10" required>
+      </div>
+
+      <button type="submit">Analizza Dispositivo</button>
+    </form>
+
+    <div id="resultCard" class="result-card">
+      <span id="statusBadge" class="status-badge"></span>
+      <h3 id="resultTitle"></h3>
+      <p id="resultDescription"></p>
+
+      <div class="recommendations">
+        <h4>Consigli per il tuo budget:</h4>
+        <ul id="recommendationsList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const recommendationsDB = {
+      smartphone: [
+        { maxBudget: 150, options: ["Redmi Note 13", "POCO M6"] },
+        { maxBudget: 300, options: ["Samsung Galaxy A35", "Nothing Phone (2a)", "Redmi Note 13 Pro"] },
+        { maxBudget: 600, options: ["Google Pixel 8a", "Samsung Galaxy S23", "Xiaomi 13T"] },
+        { maxBudget: Infinity, options: ["iPhone 15", "Samsung Galaxy S24 Ultra", "Google Pixel 9 Pro"] }
+      ],
+      tablet: [
+        { maxBudget: 150, options: ["Redmi Pad SE", "Lenovo Tab M11"] },
+        { maxBudget: 350, options: ["Xiaomi Pad 6", "iPad 10ª generazione"] },
+        { maxBudget: Infinity, options: ["iPad Air (M2)", "Samsung Galaxy Tab S9"] }
+      ],
+      speaker: [
+        { maxBudget: 50, options: ["JBL GO 3", "Sony SRS-XB100"] },
+        { maxBudget: 120, options: ["JBL Flip 6", "Soundcore Motion+"] },
+        { maxBudget: Infinity, options: ["Marshall Emberton II", "JBL Charge 5"] }
+      ],
+      smartwatch: [
+        { maxBudget: 60, options: ["Redmi Watch 4", "CMF Watch Pro 2"] },
+        { maxBudget: 200, options: ["Galaxy Watch 6", "Amazfit Balance"] },
+        { maxBudget: Infinity, options: ["Apple Watch Series 9", "Galaxy Watch 7"] }
+      ]
+    };
+
+    document.getElementById('techForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const category = document.getElementById('category').value;
+      const model = document.getElementById('model').value.trim();
+      const year = parseInt(document.getElementById('year').value);
+      const budget = parseFloat(document.getElementById('budget').value);
+
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - year;
+
+      const resultCard = document.getElementById('resultCard');
+      const statusBadge = document.getElementById('statusBadge');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultDescription = document.getElementById('resultDescription');
+      const recommendationsList = document.getElementById('recommendationsList');
+
+      let statusText = '';
+      let statusClass = '';
+      let title = '';
+      let description = '';
+
+      if (age <= 2) {
+        statusText = 'Puoi tenerlo!';
+        statusClass = 'status-keep';
+        title = `${model} è ancora molto valido`;
+        description = `Ha circa ${age} anni. Riceve probabilmente ancora aggiornamenti ed ha prestazioni adeguate per la maggior parte delle attività. Ti consigliamo di tenerlo ancora.`;
+      } else if (age <= 4) {
+        statusText = 'Valuta un upgrade';
+        statusClass = 'status-upgrade';
+        title = `${model} inizia a mostrare i suoi anni`;
+        description = `Con ${age} anni di servizio, la batteria o il supporto software potrebbero iniziare a mostrare i limiti. Se noti rallentamenti, può valere la pena cambiarlo.`;
+      } else {
+        statusText = 'Consigliata sostituzione';
+        statusClass = 'status-replace';
+        title = `${model} è da sostituire`;
+        description = `Un dispositivo di ${age} anni è ormai superato per aggiornamenti di sicurezza, batteria e prestazioni generali. Un cambio ti darà un netto salto di qualità.`;
+      }
+
+      resultCard.style.display = 'block';
+      resultCard.style.backgroundColor = age <= 2 ? '#f0f9f1' : (age <= 4 ? '#fffbe6' : '#fff0f0');
+      statusBadge.className = `status-badge ${statusClass}`;
+      statusBadge.textContent = statusText;
+      resultTitle.textContent = title;
+      resultDescription.textContent = description;
+
+      recommendationsList.innerHTML = '';
+      const catDB = recommendationsDB[category] || recommendationsDB.smartphone;
+      const matchedTier = catDB.find(tier => budget <= tier.maxBudget) || catDB[catDB.length - 1];
+
+      matchedTier.options.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `• ${item}`;
+        recommendationsList.appendChild(li);
+      });
+    });
+  </script>
+
+</body>
+</html>
