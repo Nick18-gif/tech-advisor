@@ -14,7 +14,7 @@
     }
     
     body { 
-      background: linear-gradient(135deg, #090d16 0%, #111827 30%, #1e1b4b 70%, #312e81 100%);
+      background: #070913;
       color: #ffffff; 
       display: flex; 
       justify-content: center; 
@@ -25,62 +25,99 @@
       overflow-x: hidden;
     }
 
-    /* Elementi liquidi e luminosi sotto il vetro con animazione graduale */
-    body::before, body::after {
-      content: '';
+    /* Sfere di luce fluide in movimento continuo dietro il vetro */
+    .liquid-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(70px);
+      filter: blur(80px);
       z-index: 0;
-      animation: float 10s ease-in-out infinite alternate;
+      animation: float 12s ease-in-out infinite alternate;
     }
-    body::before {
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.7) 0%, rgba(37, 99, 235, 0.2) 100%);
-      top: 10%;
+
+    .orb-1 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.1) 100%);
+      top: 5%;
       left: 10%;
     }
-    body::after {
-      width: 380px;
-      height: 380px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.2) 100%);
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.75) 0%, rgba(236, 72, 153, 0.1) 100%);
       bottom: 5%;
       right: 10%;
-      animation-delay: -5s;
+      animation-delay: -6s;
+    }
+
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.7) 0%, rgba(99, 102, 241, 0.1) 100%);
+      top: 40%;
+      right: 30%;
+      animation-delay: -3s;
     }
 
     @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, 40px) scale(1.1); }
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate(40px, 50px) scale(1.15) rotate(180deg); }
+      100% { transform: translate(-30px, 20px) scale(0.95) rotate(360deg); }
     }
 
-    /* Contenitore ad alto effetto Liquid Glass (Glassmorphism Avanzato) */
+    /* SCHEDA PRINCIPALE - LIQUID GLASS ESTREMO */
     .container { 
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.08); 
-      backdrop-filter: blur(28px) saturate(210%);
-      -webkit-backdrop-filter: blur(28px) saturate(210%);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-top: 1px solid rgba(255, 255, 255, 0.6);
-      border-left: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 32px; 
-      border-radius: 28px; 
+      /* Trasparenza modulata con gradiente di luce sul vetro */
+      background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.22) 0%, 
+        rgba(255, 255, 255, 0.05) 40%, 
+        rgba(255, 255, 255, 0.02) 100%
+      ); 
+      backdrop-filter: blur(35px) saturate(240%);
+      -webkit-backdrop-filter: blur(35px) saturate(240%);
+      
+      /* Bordi sfaccettati e brillanti tipo cristallo */
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+      border-left: 1.5px solid rgba(255, 255, 255, 0.5);
+      
+      padding: 34px; 
+      border-radius: 32px; 
+      
+      /* Ombre complesse di rifrazione interna ed esterna */
       box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2); 
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        inset 0 2px 3px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.1); 
+      
       max-width: 550px; 
       width: 100%; 
     }
 
+    /* Riflesso di specchio di luce nell'angolo in alto a destra */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 32px 32px 0 0;
+      pointer-events: none;
+    }
+
     h1 { 
-      font-size: 1.9rem; 
+      font-size: 2rem; 
       margin-bottom: 8px; 
       color: #ffffff; 
       text-align: center; 
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
       letter-spacing: -0.5px;
     }
     
@@ -88,8 +125,8 @@
       font-size: 0.95rem; 
       color: rgba(255, 255, 255, 0.9); 
       text-align: center; 
-      margin-bottom: 24px; 
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      margin-bottom: 26px; 
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 
     .form-group { margin-bottom: 18px; }
@@ -100,23 +137,27 @@
       margin-bottom: 8px; 
       font-size: 0.9rem; 
       color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 
+    /* Input e Select in stile Vetro Frosted */
     select, input { 
       width: 100%; 
-      padding: 13px 16px; 
-      background: rgba(255, 255, 255, 0.07);
+      padding: 14px 18px; 
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.25); 
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 14px; 
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
+      border-left: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 16px; 
       font-size: 1rem; 
       color: #ffffff;
       outline: none; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 
+        inset 0 1px 3px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.2);
     }
 
     input::placeholder {
@@ -124,86 +165,100 @@
     }
 
     select option {
-      background-color: #0f172a;
+      background-color: #0b0f19;
       color: #ffffff;
     }
 
     select:focus, input:focus { 
       border-color: #60a5fa; 
-      background: rgba(255, 255, 255, 0.18);
-      box-shadow: 0 0 16px rgba(96, 165, 250, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-      transform: translateY(-1px);
-    }
-
-    button { 
-      width: 100%; 
-      padding: 15px; 
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: white; 
-      border: 1px solid rgba(255, 255, 255, 0.4); 
-      border-radius: 14px; 
-      font-size: 1.05rem; 
-      font-weight: bold; 
-      cursor: pointer; 
-      margin-top: 12px; 
-      transition: all 0.3s ease; 
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
-    }
-
-    button:hover { 
-      background: linear-gradient(135deg, rgba(96, 165, 250, 0.9) 0%, rgba(59, 130, 246, 0.95) 100%);
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 
+        0 0 20px rgba(96, 165, 250, 0.5), 
+        inset 0 1px 4px rgba(255, 255, 255, 0.6);
       transform: translateY(-2px);
     }
 
+    /* Pulsante di vetro trasparente e brillante */
+    button { 
+      width: 100%; 
+      padding: 16px; 
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.75) 0%, rgba(37, 99, 235, 0.85) 100%);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      color: white; 
+      border: 1px solid rgba(255, 255, 255, 0.45); 
+      border-top: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 16px; 
+      font-size: 1.05rem; 
+      font-weight: bold; 
+      cursor: pointer; 
+      margin-top: 14px; 
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+      box-shadow: 
+        0 12px 30px rgba(37, 99, 235, 0.4), 
+        inset 0 2px 2px rgba(255, 255, 255, 0.6);
+    }
+
+    button:hover { 
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.85) 0%, rgba(59, 130, 246, 0.95) 100%);
+      box-shadow: 
+        0 14px 35px rgba(59, 130, 246, 0.6), 
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      transform: translateY(-3px) scale(1.01);
+    }
+
+    /* Card di risultato in vetro colorato */
     .result-card { 
-      margin-top: 24px; 
-      padding: 22px; 
-      border-radius: 18px; 
+      margin-top: 26px; 
+      padding: 24px; 
+      border-radius: 20px; 
       display: none; 
       animation: fadeIn 0.4s ease-out; 
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-top: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3), 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
     @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(12px); } 
+      from { opacity: 0; transform: translateY(14px); } 
       to { opacity: 1; transform: translateY(0); } 
     }
 
     .status-badge { 
       display: inline-block; 
-      padding: 6px 14px; 
+      padding: 7px 16px; 
       border-radius: 20px; 
       font-weight: bold; 
       font-size: 0.85rem; 
       margin-bottom: 12px; 
       text-transform: uppercase; 
       letter-spacing: 0.5px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
     }
 
-    .status-keep { background-color: rgba(34, 197, 94, 0.25); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.5); }
-    .status-upgrade { background-color: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid rgba(253, 224, 71, 0.5); }
-    .status-replace { background-color: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.5); }
+    .status-keep { background-color: rgba(34, 197, 94, 0.3); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.6); }
+    .status-upgrade { background-color: rgba(234, 179, 8, 0.3); color: #fde047; border: 1px solid rgba(253, 224, 71, 0.6); }
+    .status-replace { background-color: rgba(239, 68, 68, 0.3); color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.6); }
 
-    .result-card h3 { margin-bottom: 10px; font-size: 1.25rem; color: #ffffff; }
-    .result-card p { font-size: 0.95rem; line-height: 1.5; color: #ffffff; margin-bottom: 12px; }
+    .result-card h3 { margin-bottom: 10px; font-size: 1.25rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .result-card p { font-size: 0.95rem; line-height: 1.5; color: #ffffff; margin-bottom: 12px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
     .recommendations { 
       margin-top: 14px; 
-      background: rgba(0, 0, 0, 0.25); 
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.3); 
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding: 14px; 
       border-radius: 14px; 
       border-left: 4px solid #60a5fa; 
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
     }
 
     .recommendations h4 { font-size: 0.95rem; margin-bottom: 6px; color: #ffffff; }
@@ -212,6 +267,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Sfere fluide luminose per la rifrazione del vetro -->
+  <div class="liquid-orb orb-1"></div>
+  <div class="liquid-orb orb-2"></div>
+  <div class="liquid-orb orb-3"></div>
 
   <div class="container">
     <h1>Tech advisor</h1>
@@ -324,7 +384,7 @@
       }
 
       resultCard.style.display = 'block';
-      resultCard.style.backgroundColor = age <= 2 ? 'rgba(34, 197, 94, 0.15)' : (age <= 4 ? 'rgba(234, 179, 8, 0.15)' : 'rgba(239, 68, 68, 0.15)');
+      resultCard.style.backgroundColor = age <= 2 ? 'rgba(34, 197, 94, 0.18)' : (age <= 4 ? 'rgba(234, 179, 8, 0.18)' : 'rgba(239, 68, 68, 0.18)');
       statusBadge.className = `status-badge ${statusClass}`;
       statusBadge.textContent = statusText;
       resultTitle.textContent = title;
