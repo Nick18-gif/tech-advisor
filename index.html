@@ -14,9 +14,8 @@
     }
     
     body { 
-      /* Sfondo dinamico e colorato per esaltare l'effetto vetro */
       background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 70%, #4338ca 100%);
-      color: #f8fafc; 
+      color: #ffffff; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
@@ -26,7 +25,6 @@
       overflow-x: hidden;
     }
 
-    /* Elementi decorativi per lo sfondo illuminato sotto il vetro */
     body::before, body::after {
       content: '';
       position: absolute;
@@ -49,7 +47,6 @@
       right: 15%;
     }
 
-    /* Effetto Liquid Glass per il contenitore principale */
     .container { 
       position: relative;
       z-index: 1;
@@ -74,7 +71,7 @@
     
     p.subtitle { 
       font-size: 0.95rem; 
-      color: rgba(255, 255, 255, 0.8); 
+      color: rgba(255, 255, 255, 0.9); 
       text-align: center; 
       margin-bottom: 24px; 
     }
@@ -86,14 +83,14 @@
       font-weight: 600; 
       margin-bottom: 6px; 
       font-size: 0.9rem; 
-      color: #e2e8f0;
+      color: #ffffff;
     }
 
     select, input { 
       width: 100%; 
       padding: 12px; 
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2); 
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3); 
       border-radius: 12px; 
       font-size: 1rem; 
       color: #ffffff;
@@ -103,6 +100,11 @@
       -webkit-backdrop-filter: blur(5px);
     }
 
+    /* Colore dei placeholder (i testi di esempio grigi) reso bianco leggibile */
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
     select option {
       background-color: #1e1b4b;
       color: #ffffff;
@@ -110,8 +112,8 @@
 
     select:focus, input:focus { 
       border-color: #60a5fa; 
-      background: rgba(255, 255, 255, 0.18);
-      box-shadow: 0 0 12px rgba(96, 165, 250, 0.4);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
     }
 
     button { 
@@ -143,7 +145,7 @@
       animation: fadeIn 0.3s ease-in-out; 
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     @keyframes fadeIn { 
@@ -167,11 +169,11 @@
     .status-replace { background-color: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.4); }
 
     .result-card h3 { margin-bottom: 10px; font-size: 1.2rem; color: #ffffff; }
-    .result-card p { font-size: 0.95rem; line-height: 1.5; color: #e2e8f0; margin-bottom: 12px; }
+    .result-card p { font-size: 0.95rem; line-height: 1.5; color: #ffffff; margin-bottom: 12px; }
 
     .recommendations { 
       margin-top: 12px; 
-      background: rgba(0, 0, 0, 0.2); 
+      background: rgba(0, 0, 0, 0.25); 
       padding: 12px; 
       border-radius: 12px; 
       border-left: 4px solid #60a5fa; 
@@ -179,7 +181,7 @@
 
     .recommendations h4 { font-size: 0.95rem; margin-bottom: 6px; color: #ffffff; }
     .recommendations ul { list-style: none; }
-    .recommendations li { font-size: 0.9rem; padding: 4px 0; color: #cbd5e1; }
+    .recommendations li { font-size: 0.9rem; padding: 4px 0; color: #ffffff; }
   </style>
 </head>
 <body>
@@ -314,5 +316,4 @@
   </script>
 
 </body>
-          </html>
-          
+</html>
