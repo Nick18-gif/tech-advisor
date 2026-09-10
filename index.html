@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Tech Advisor</title>
   <meta name="description" content="Tech Advisor ti aiuta a valutare se conviene aggiornare, riparare o sostituire il tuo dispositivo elettronico e ti suggerisce cosa acquistare in base al tuo budget.">
   
@@ -41,12 +41,12 @@
       --text-sub: rgba(255, 255, 255, 0.85);
       --label-text: rgba(255, 255, 255, 0.95);
 
-      --input-bg: rgba(255, 255, 255, 0.07);
-      --input-border: rgba(255, 255, 255, 0.25);
-      --input-border-top: rgba(255, 255, 255, 0.4);
+      --input-bg: rgba(255, 255, 255, 0.12);
+      --input-border: rgba(255, 255, 255, 0.35);
+      --input-border-top: rgba(255, 255, 255, 0.5);
       --input-text: #ffffff;
       --input-placeholder: rgba(255, 255, 255, 0.65);
-      --input-focus-bg: rgba(255, 255, 255, 0.18);
+      --input-focus-bg: rgba(255, 255, 255, 0.22);
       --select-option-bg: #0f172a;
 
       --btn-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%);
@@ -74,12 +74,12 @@
         --text-sub: #475569;
         --label-text: #334155;
 
-        --input-bg: rgba(255, 255, 255, 0.55);
-        --input-border: rgba(203, 213, 225, 0.8);
-        --input-border-top: rgba(255, 255, 255, 0.9);
+        --input-bg: rgba(255, 255, 255, 0.7);
+        --input-border: rgba(203, 213, 225, 0.9);
+        --input-border-top: rgba(255, 255, 255, 0.95);
         --input-text: #0f172a;
         --input-placeholder: #64748b;
-        --input-focus-bg: rgba(255, 255, 255, 0.85);
+        --input-focus-bg: rgba(255, 255, 255, 0.95);
         --select-option-bg: #ffffff;
 
         --btn-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(29, 78, 216, 0.95) 100%);
@@ -182,16 +182,20 @@
       letter-spacing: -0.1px;
     }
 
+    /* FIX SPECIFICO PER IPHONE / SAFARI */
     select, input { 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
       width: 100%; 
-      padding: 13px 16px; 
+      padding: 14px 16px; 
       background: var(--input-bg);
       border: 1px solid var(--input-border); 
       border-top: 1px solid var(--input-border-top);
       border-radius: 14px; 
-      font-size: 0.98rem; 
+      font-size: 16px; /* Evita zoom automatico su iPhone */
       font-weight: 400;
-      color: var(--input-text);
+      color: var(--input-text) !important;
       outline: none; 
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
       backdrop-filter: blur(10px);
@@ -200,8 +204,18 @@
       letter-spacing: -0.2px;
     }
 
+    /* FIX AUTOFILL IPHONE */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--input-text) !important;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(15, 23, 42, 0.9) inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
     input::placeholder {
       color: var(--input-placeholder);
+      opacity: 1;
       font-weight: 400;
     }
 
@@ -218,6 +232,7 @@
     }
 
     button { 
+      -webkit-appearance: none;
       width: 100%; 
       padding: 15px; 
       background: var(--btn-bg);
