@@ -6,11 +6,9 @@
   <title>Tech Advisor</title>
   <meta name="description" content="Tech Advisor ti aiuta a valutare se conviene aggiornare, riparare o sostituire il tuo dispositivo elettronico e ti suggerisce cosa acquistare in base al tuo budget.">
   
-  <!-- FAVICON / LOGO SCHEDA BROWSER -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
 
-  <!-- Importazione font stile Apple -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +23,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* VARIABLE COLORI - BASE SCURA (DEFAULT) */
     :root {
       --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 30%, #1e1b4b 70%, #312e81 100%);
       --orb1-bg: radial-gradient(circle, rgba(59, 130, 246, 0.7) 0%, rgba(37, 99, 235, 0.2) 100%);
@@ -49,7 +46,6 @@
       --recom-border: rgba(255, 255, 255, 0.1);
     }
 
-    /* MEDIA QUERY PER LA MODALITÀ CHIARA (LIGHT MODE) */
     @media (prefers-color-scheme: light) {
       :root {
         --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 30%, #e0e7ff 70%, #c7d2fe 100%);
@@ -164,7 +160,6 @@
       letter-spacing: -0.1px;
     }
 
-    /* FIX DEFINITIVO IPHONE / SAFARI */
     select, input { 
       -webkit-appearance: none !important;
       -moz-appearance: none !important;
@@ -239,6 +234,19 @@
       transform: translateY(-2px);
     }
 
+    .error-card {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 18px;
+      display: none;
+      background-color: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #ef4444;
+      font-weight: 600;
+      text-align: center;
+      animation: fadeIn 0.4s ease-out;
+    }
+
     .result-card { 
       margin-top: 24px; 
       padding: 22px; 
@@ -277,6 +285,7 @@
       .status-keep { color: #4ade80; }
       .status-upgrade { color: #fde047; }
       .status-replace { color: #fca5a5; }
+      .error-card { color: #fca5a5; }
     }
 
     .result-card h3 { margin-bottom: 10px; font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.3px; }
@@ -356,6 +365,10 @@
       <button type="submit">Valuta Dispositivo</button>
     </form>
 
+    <div id="errorCard" class="error-card">
+      ❌ Mi dispiace, ma questo non sembra un dispositivo tecnologico valido!
+    </div>
+
     <div id="resultCard" class="result-card">
       <span id="statusBadge" class="status-badge"></span>
       <h3 id="resultTitle"></h3>
@@ -374,6 +387,14 @@
   </div>
 
   <script>
+    const knownBrands = [
+      "iphone", "ipad", "macbook", "imac", "samsung", "galaxy", "huawei", "honor", 
+      "xiaomi", "redmi", "poco", "realme", "oppo", "vivo", "oneplus", "google", 
+      "pixel", "motorola", "moto", "sony", "jbl", "lenovo", "asus", "nokia", 
+      "nothing", "cmf", "soundcore", "marshall", "bose", "apple", "watch", 
+      "fitbit", "amazfit", "garmin", "lg", "tcl", "zte", "alcatel"
+    ];
+
     const recommendationsDB = {
       smartphone: [
         { maxBudget: 150, options: ["Redmi Note 13", "POCO M6"] },
@@ -407,10 +428,25 @@
       const condition = document.getElementById('condition').value;
       const budget = parseFloat(document.getElementById('budget').value);
 
+      const errorCard = document.getElementById('errorCard');
+      const resultCard = document.getElementById('resultCard');
+
+      // VERIFICA SE È UN DISPOSITIVO REALE
+      const modelLower = model.toLowerCase();
+      const isValid = knownBrands.some(brand => modelLower.includes(brand));
+
+      if (!isValid) {
+        resultCard.style.display = 'none';
+        errorCard.style.display = 'block';
+        return; // Ferma il flusso e non mostra la scheda risultati
+      }
+
+      // Se valido, nascondi l'errore e procedi
+      errorCard.style.display = 'none';
+
       const currentYear = new Date().getFullYear();
       const age = currentYear - year;
 
-      const resultCard = document.getElementById('resultCard');
       const statusBadge = document.getElementById('statusBadge');
       const resultTitle = document.getElementById('resultTitle');
       const resultDescription = document.getElementById('resultDescription');
@@ -424,7 +460,6 @@
       let description = '';
       let condDesc = '';
 
-      // Valutazione generale in base ad Anno + Condizione
       if (condition === 'damaged' || age > 4) {
         statusText = 'Consiglio la sostituzione';
         statusClass = 'status-replace';
@@ -442,7 +477,6 @@
         description = `Ha circa ${age} anni ed è mantenuto molto bene! Ti consigliamo di tenertelo ancora strettamente o rivenderlo a un ottimo prezzo se desideri fare un upgrade.`;
       }
 
-      // Valutazione secondaria specifica per le condizioni
       switch(condition) {
         case 'excellent':
           condDesc = '✨ **Stato Perfetto:** Puoi ottenere il massimo valore di permuta/usato se decidi di venderlo oggi stesso.';
