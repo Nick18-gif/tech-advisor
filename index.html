@@ -25,8 +25,8 @@
 
     :root {
       --bg-dark: #0B0F19;
-      --card-bg: rgba(23, 31, 51, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(23, 31, 51, 0.55);
+      --card-border: rgba(255, 255, 255, 0.12);
       --text-main: #F3F4F6;
       --text-muted: #9CA3AF;
       --accent-blue: #3B82F6;
@@ -42,9 +42,37 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Effetti luce di sfondo per far risaltare il vetro trasparente */
+    body::before, body::after {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    body::before {
+      background: #3B82F6;
+      top: 10%;
+      left: 15%;
+    }
+
+    body::after {
+      background: #8B5CF6;
+      bottom: 10%;
+      right: 15%;
     }
 
     .container {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 520px;
       background: var(--card-bg);
@@ -52,7 +80,8 @@
       border-radius: 24px;
       padding: 32px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .header {
@@ -92,18 +121,20 @@
     .form-control {
       width: 100%;
       padding: 14px 16px;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.4);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       color: var(--text-main);
       font-size: 1rem;
       outline: none;
       transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .form-control:focus {
       border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
     }
 
     select.form-control option {
@@ -142,6 +173,8 @@
       border-radius: 16px;
       border: 1px solid transparent;
       animation: fadeIn 0.3s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .card-error {
@@ -351,12 +384,12 @@
       return 2000;
     }
 
-    // Parametri segreti criptati in Base64 (Censura completa nel codice sorgente)
-    const _eCat = "c21hcnRwaG9uZQ=="; // smartphone
-    const _eMod = "MTggOA==";           // 18 8
-    const _eYr = 2017;                  // 2017
-    const _eCND = "ZGFtYWdlZA==";       // damaged
-    const _eBgt = 1817;                 // 1817
+    // Parametri segreti criptati in Base64 (Censura completa)
+    const _eCat = "c21hcnRwaG9uZQ=="; 
+    const _eMod = "MTggOA==";           
+    const _eYr = 2017;                  
+    const _eCND = "ZGFtYWdlZA==";       
+    const _eBgt = 1817;                 
     const _eMsg = "RG9uZSBpcyBiZXR0ZXIgdGhhbiBwZXJmZWN04oCUanVzdCBsaWtlIHRoaXMgc2l0ZS4=";
 
     document.getElementById('techForm').addEventListener('submit', function(e) {
@@ -372,7 +405,7 @@
       const resultCard = document.getElementById('resultCard');
       const modelLower = model.toLowerCase();
 
-      // --- 1. VERIFICA EASTER EGG (Invisibile e criptato) ---
+      // --- 1. VERIFICA EASTER EGG ---
       if (category === atob(_eCat) && 
           modelLower === atob(_eMod) && 
           year === _eYr && 
@@ -385,7 +418,7 @@
         errorCard.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
         errorCard.style.borderColor = 'rgba(59, 130, 246, 0.5)';
         errorCard.style.color = '#60a5fa';
-        return; // Interrompe il form mostrando solo l'Easter Egg
+        return;
       }
 
       // Ripristino stili standard per gli errori normali
@@ -412,10 +445,9 @@
         return;
       }
 
-      // Nasconde eventuali errori precedenti
       errorCard.style.display = 'none';
 
-      // --- 4. CALCOLO VALUTAZIONE E CONSIGLI PER DISPOSITIVI NORMALI ---
+      // --- 4. CALCOLO VALUTAZIONE ---
       const currentYear = new Date().getFullYear();
       const age = currentYear - year;
 
@@ -486,5 +518,4 @@
     });
   </script>
 </body>
-          </html>
-          
+</html>
