@@ -338,7 +338,7 @@
 
       <div class="form-group">
         <label for="model">Modello esatto</label>
-        <input type="text" id="model" placeholder="Es. Huawei P30 Lite, Redmi Pad SE, JBL GO 3..." required>
+        <input type="text" id="model" placeholder="Es. Redmagic 9 Pro, Huawei P30 Lite, JBL GO 3..." required>
       </div>
 
       <div class="form-group">
@@ -362,12 +362,10 @@
         <input type="number" id="budget" placeholder="Es. 250" min="10" required>
       </div>
 
-      <button type="submit">Valuta Dispositivo</button>
+      <button type="submit" id="submitBtn">Valuta Dispositivo</button>
     </form>
 
-    <div id="errorCard" class="error-card">
-      ❌ Mi dispiace, ma questo non sembra un dispositivo tecnologico valido!
-    </div>
+    <div id="errorCard" class="error-card"></div>
 
     <div id="resultCard" class="result-card">
       <span id="statusBadge" class="status-badge"></span>
@@ -387,12 +385,14 @@
   </div>
 
   <script>
-    const knownBrands = [
+    // Database locale esteso con quasi tutti i brand esistenti
+    const extendedBrands = [
       "iphone", "ipad", "macbook", "imac", "samsung", "galaxy", "huawei", "honor", 
       "xiaomi", "redmi", "poco", "realme", "oppo", "vivo", "oneplus", "google", 
       "pixel", "motorola", "moto", "sony", "jbl", "lenovo", "asus", "nokia", 
       "nothing", "cmf", "soundcore", "marshall", "bose", "apple", "watch", 
-      "fitbit", "amazfit", "garmin", "lg", "tcl", "zte", "alcatel"
+      "fitbit", "amazfit", "garmin", "lg", "tcl", "zte", "alcatel", "redmagic", 
+      "nubia", "rog", "black shark", "meizu", "infinix", "tecno", "iqoo"
     ];
 
     const recommendationsDB = {
@@ -419,9 +419,59 @@
       ]
     };
 
-    document.getElementById('techForm').addEventListener('submit', function(e) {
+    // Stima dell'anno minimo di lancio in base al modello o categoria
+    function getMinReleaseYear(model, category) {
+      const modelLower = model.toLowerCase();
+
+      // iPhone specifici
+      if (modelLower.includes("iphone 17")) return 2025;
+      if (modelLower.includes("iphone 16")) return 2024;
+      if (modelLower.includes("iphone 15")) return 2023;
+      if (modelLower.includes("iphone 14")) return 2022;
+      if (modelLower.includes("iphone 13")) return 2021;
+      if (modelLower.includes("iphone 12")) return 2020;
+      if (modelLower.includes("iphone 11")) return 2019;
+      if (modelLower.includes("iphone x") || modelLower.includes("iphone 8")) return 2017;
+      if (modelLower.includes("iphone 7")) return 2016;
+      if (modelLower.includes("iphone 6")) return 2014;
+      if (modelLower.includes("iphone 5")) return 2012;
+      if (modelLower.includes("iphone 4")) return 2010;
+      if (modelLower.includes("iphone")) return 2007;
+
+      // Galaxy S specifici
+      if (modelLower.includes("s24")) return 2024;
+      if (modelLower.includes("s23")) return 2023;
+      if (modelLower.includes("s22")) return 2022;
+      if (modelLower.includes("s21")) return 2021;
+      if (modelLower.includes("s20")) return 2020;
+
+      // Redmagic
+      if (modelLower.includes("redmagic 9")) return 2023;
+      if (modelLower.includes("redmagic 8")) return 2022;
+      if (modelLower.includes("redmagic")) return 2018;
+
+      // Anno generale di nascita degli smartphone / smartwatch moderni
+      if (category === "smartphone") return 2007;
+      if (category === "smartwatch") return 2013;
+
+      return 2000;
+    }
+
+    // Verifica la validità su Wikipedia API
+    async function checkWikipedia(query) {
+      try {
+        const response = await fetch(`https://it.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`);
+        const data = await response.json();
+        return data.query && data.query.search && data.query.search.length > 0;
+      } catch (e) {
+        return true; // Se fallisce la rete, per sicurezza non blocca l'utente
+      }
+    }
+
+    document.getElementById('techForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      const submitBtn = document.getElementById('submitBtn');
       const category = document.getElementById('category').value;
       const model = document.getElementById('model').value.trim();
       const year = parseInt(document.getElementById('year').value);
@@ -431,18 +481,41 @@
       const errorCard = document.getElementById('errorCard');
       const resultCard = document.getElementById('resultCard');
 
-      // VERIFICA SE È UN DISPOSITIVO REALE
-      const modelLower = model.toLowerCase();
-      const isValid = knownBrands.some(brand => modelLower.includes(brand));
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Verifica in corso...";
 
-      if (!isValid) {
-        resultCard.style.display = 'none';
-        errorCard.style.display = 'block';
-        return; // Ferma il flusso e non mostra la scheda risultati
+      const modelLower = model.toLowerCase();
+      
+      // 1. Controllo se appartiene ai brand noti o se esiste su Wikipedia
+      let isBrandValid = extendedBrands.some(brand => modelLower.includes(brand));
+      if (!isBrandValid) {
+        isBrandValid = await checkWikipedia(model + " " + category);
       }
 
-      // Se valido, nascondi l'errore e procedi
+      if (!isBrandValid) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Valuta Dispositivo";
+        resultCard.style.display = 'none';
+        errorCard.textContent = "❌ Mi dispiace, ma questo non sembra un dispositivo tecnologico valido!";
+        errorCard.style.display = 'block';
+        return;
+      }
+
+      // 2. Controllo dell'anno di uscita del modello
+      const minReleaseYear = getMinReleaseYear(model, category);
+      if (year < minReleaseYear) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Valuta Dispositivo";
+        resultCard.style.display = 'none';
+        errorCard.textContent = `❌ Mi dispiace, ma "${model}" non esisteva ancora nel ${year}!`;
+        errorCard.style.display = 'block';
+        return;
+      }
+
+      // Se tutto è valido, procedi
       errorCard.style.display = 'none';
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Valuta Dispositivo";
 
       const currentYear = new Date().getFullYear();
       const age = currentYear - year;
@@ -465,54 +538,4 @@
         statusClass = 'status-replace';
         title = `${model} è da sostituire`;
         description = `Tra anzianità (${age} anni) o danni al dispositivo, le riparazioni non sono convenienti. Ti consigliamo di passare a un nuovo modello.`;
-      } else if (condition === 'fair' || age >= 3) {
-        statusText = 'Valuta un cambio';
-        statusClass = 'status-upgrade';
-        title = `${model} inizia a mostrare i suoi anni`;
-        description = `Il dispositivo ha circa ${age} anni. Può ancora essere usato per compiti base, ma la batteria o lo stato estetico potrebbero limitarne l'uso.`;
-      } else {
-        statusText = 'È Ancora Buono!';
-        statusClass = 'status-keep';
-        title = `${model} è molto valido`;
-        description = `Ha circa ${age} anni ed è mantenuto molto bene! Ti consigliamo di tenertelo ancora strettamente o rivenderlo a un ottimo prezzo se desideri fare un upgrade.`;
-      }
-
-      switch(condition) {
-        case 'excellent':
-          condDesc = '✨ **Stato Perfetto:** Puoi ottenere il massimo valore di permuta/usato se decidi di venderlo oggi stesso.';
-          break;
-        case 'good':
-          condDesc = '👍 **Buono Stato:** Presenta una normale usura del tempo. Funzionamento ottimale senza costi aggiuntivi di riparazione.';
-          break;
-        case 'fair':
-          condDesc = '⚠️ **Stato Discreto:** La batteria o l\'estetica necessitano attenzione. Valuta se spendere per ripararlo o mettere quei soldi nel nuovo budget.';
-          break;
-        case 'damaged':
-          condDesc = '🛠️ **Danneggiato:** Il costo del ricambio (schermo/hardware) spesso supera il valore residuo del dispositivo stesso.';
-          break;
-      }
-
-      resultCard.style.display = 'block';
-      resultCard.style.backgroundColor = statusClass === 'status-keep' ? 'rgba(34, 197, 94, 0.15)' : (statusClass === 'status-upgrade' ? 'rgba(234, 179, 8, 0.15)' : 'rgba(239, 68, 68, 0.15)');
-      statusBadge.className = `status-badge ${statusClass}`;
-      statusBadge.textContent = statusText;
-      resultTitle.textContent = title;
-      resultDescription.textContent = description;
-
-      conditionTitle.textContent = "Valutazione Condizioni:";
-      conditionDescription.innerHTML = condDesc;
-
-      recommendationsList.innerHTML = '';
-      const catDB = recommendationsDB[category] || recommendationsDB.smartphone;
-      const matchedTier = catDB.find(tier => budget <= tier.maxBudget) || catDB[catDB.length - 1];
-
-      matchedTier.options.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = `• ${item}`;
-        recommendationsList.appendChild(li);
-      });
-    });
-  </script>
-
-</body>
-</html>
+      } else if (condition === 'f
