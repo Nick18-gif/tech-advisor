@@ -171,12 +171,12 @@
       appearance: none !important;
       width: 100% !important; 
       padding: 14px 16px !important; 
-      background-color: #1e293b !important; /* Sfondo scuro solido compatibile con Safari */
+      background-color: #1e293b !important;
       border: 1px solid rgba(255, 255, 255, 0.3) !important; 
       border-radius: 14px !important; 
-      font-size: 16px !important; /* Previene lo zoom automatico di Safari */
+      font-size: 16px !important; 
       font-weight: 500 !important;
-      color: #ffffff !important; /* Testo sempre bianco e nitido */
+      color: #ffffff !important; 
       outline: none !important; 
       box-shadow: none !important;
       letter-spacing: -0.2px;
@@ -190,7 +190,6 @@
       }
     }
 
-    /* FIX SPECIFICO AUTOFILL SAFARI / IPHONE */
     input:-webkit-autofill,
     input:-webkit-autofill:hover, 
     input:-webkit-autofill:focus,
@@ -283,6 +282,17 @@
     .result-card h3 { margin-bottom: 10px; font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.3px; }
     .result-card p { font-size: 0.93rem; font-weight: 400; line-height: 1.5; color: var(--text-sub); margin-bottom: 12px; }
 
+    .condition-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--recom-border);
+    }
+
+    .condition-box h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main); }
+    .condition-box p { font-size: 0.88rem; margin-bottom: 0; }
+
     .recommendations { 
       margin-top: 14px; 
       background: var(--recom-bg); 
@@ -328,6 +338,17 @@
       </div>
 
       <div class="form-group">
+        <label for="condition">Condizioni del Dispositivo</label>
+        <select id="condition" required>
+          <option value="" disabled selected>Seleziona le condizioni attuali</option>
+          <option value="excellent">Come nuovo (Nessun graffio, batteria ottima)</option>
+          <option value="good">Buono (Lievi segni d'usura, batteria ok)</option>
+          <option value="fair">Discreto (Graffi evidenti o batteria usurata)</option>
+          <option value="damaged">Danneggiato (Schermo/Vetro rotto o problemi hardware)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="budget">Il tuo Budget (€)</label>
         <input type="number" id="budget" placeholder="Es. 250" min="10" required>
       </div>
@@ -339,6 +360,11 @@
       <span id="statusBadge" class="status-badge"></span>
       <h3 id="resultTitle"></h3>
       <p id="resultDescription"></p>
+
+      <div class="condition-box">
+        <h4 id="conditionTitle">Valutazione Stato Fisico:</h4>
+        <p id="conditionDescription"></p>
+      </div>
 
       <div class="recommendations">
         <h4>Consigli per il tuo budget:</h4>
@@ -378,6 +404,7 @@
       const category = document.getElementById('category').value;
       const model = document.getElementById('model').value.trim();
       const year = parseInt(document.getElementById('year').value);
+      const condition = document.getElementById('condition').value;
       const budget = parseFloat(document.getElementById('budget').value);
 
       const currentYear = new Date().getFullYear();
@@ -387,36 +414,59 @@
       const statusBadge = document.getElementById('statusBadge');
       const resultTitle = document.getElementById('resultTitle');
       const resultDescription = document.getElementById('resultDescription');
+      const conditionTitle = document.getElementById('conditionTitle');
+      const conditionDescription = document.getElementById('conditionDescription');
       const recommendationsList = document.getElementById('recommendationsList');
 
       let statusText = '';
       let statusClass = '';
       let title = '';
       let description = '';
+      let condDesc = '';
 
-      if (age <= 2) {
-        statusText = 'È Ancora Buono!';
-        statusClass = 'status-keep';
-        title = `${model} è molto valido`;
-        description = `Ha circa ${age} anni. Riceve probabilmente ancora aggiornamenti ed ha prestazioni adeguate per la maggior parte delle attività. Ti consigliamo di tenerlo ancora ma se lo vuoi rivendere il prezzo potrebbe essere molto alto.`;
-      } else if (age <= 4) {
-        statusText = 'Valuta uno nuovo';
-        statusClass = 'status-upgrade';
-        title = `${model} inizia a mostrare i suoi anni`;
-        description = `Con ${age} anni di servizio, la batteria o il supporto software potrebbero iniziare a mostrare i limiti. Se noti rallentamenti o spegnimenti improvvisi, può valere la pena cambiarlo ma se gli aggiornamenti vanno ancora potresti ancora tenerlo.`;
-      } else {
+      // Valutazione generale in base ad Anno + Condizione
+      if (condition === 'damaged' || age > 4) {
         statusText = 'Consiglio la sostituzione';
         statusClass = 'status-replace';
         title = `${model} è da sostituire`;
-        description = `Un dispositivo di ${age} anni è ormai superato per aggiornamenti di sicurezza, batteria e prestazioni generali. Cambiarlo ti darà un grande salto di qualità.`;
+        description = `Tra anzianità (${age} anni) o danni al dispositivo, le riparazioni non sono convenienti. Ti consigliamo di passare a un nuovo modello.`;
+      } else if (condition === 'fair' || age >= 3) {
+        statusText = 'Valuta un cambio';
+        statusClass = 'status-upgrade';
+        title = `${model} inizia a mostrare i suoi anni`;
+        description = `Il dispositivo ha circa ${age} anni. Può ancora essere usato per compiti base, ma la batteria o lo stato estetico potrebbero limitarne l'uso.`;
+      } else {
+        statusText = 'È Ancora Buono!';
+        statusClass = 'status-keep';
+        title = `${model} è molto valido`;
+        description = `Ha circa ${age} anni ed è mantenuto molto bene! Ti consigliamo di tenertelo ancora strettamente o rivenderlo a un ottimo prezzo se desideri fare un upgrade.`;
+      }
+
+      // Valutazione secondaria specifica per le condizioni
+      switch(condition) {
+        case 'excellent':
+          condDesc = '✨ **Stato Perfetto:** Puoi ottenere il massimo valore di permuta/usato se decidi di venderlo oggi stesso.';
+          break;
+        case 'good':
+          condDesc = '👍 **Buono Stato:** Presenta una normale usura del tempo. Funzionamento ottimale senza costi aggiuntivi di riparazione.';
+          break;
+        case 'fair':
+          condDesc = '⚠️ **Stato Discreto:** La batteria o l\'estetica necessitano attenzione. Valuta se spendere per ripararlo o mettere quei soldi nel nuovo budget.';
+          break;
+        case 'damaged':
+          condDesc = '🛠️ **Danneggiato:** Il costo del ricambio (schermo/hardware) spesso supera il valore residuo del dispositivo stesso.';
+          break;
       }
 
       resultCard.style.display = 'block';
-      resultCard.style.backgroundColor = age <= 2 ? 'rgba(34, 197, 94, 0.15)' : (age <= 4 ? 'rgba(234, 179, 8, 0.15)' : 'rgba(239, 68, 68, 0.15)');
+      resultCard.style.backgroundColor = statusClass === 'status-keep' ? 'rgba(34, 197, 94, 0.15)' : (statusClass === 'status-upgrade' ? 'rgba(234, 179, 8, 0.15)' : 'rgba(239, 68, 68, 0.15)');
       statusBadge.className = `status-badge ${statusClass}`;
       statusBadge.textContent = statusText;
       resultTitle.textContent = title;
       resultDescription.textContent = description;
+
+      conditionTitle.textContent = "Valutazione Condizioni:";
+      conditionDescription.innerHTML = condDesc;
 
       recommendationsList.innerHTML = '';
       const catDB = recommendationsDB[category] || recommendationsDB.smartphone;
