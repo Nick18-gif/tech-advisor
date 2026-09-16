@@ -2,332 +2,233 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Advisor</title>
-  <meta name="description" content="Tech Advisor ti aiuta a valutare se conviene aggiornare, riparare o sostituire il tuo dispositivo elettronico e ti suggerisce cosa acquistare in base al tuo budget.">
-  
+  <meta name="description" content="Tech Advisor - Consigli per il tuo dispositivo">
+
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     :root {
-      --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 30%, #1e1b4b 70%, #312e81 100%);
-      --orb1-bg: radial-gradient(circle, rgba(59, 130, 246, 0.7) 0%, rgba(37, 99, 235, 0.2) 100%);
-      --orb2-bg: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.2) 100%);
-      
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.35);
-      --glass-border-top: rgba(255, 255, 255, 0.6);
-      --glass-border-left: rgba(255, 255, 255, 0.5);
-      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
-
-      --text-main: #ffffff;
-      --text-sub: rgba(255, 255, 255, 0.85);
-      --label-text: rgba(255, 255, 255, 0.95);
-
-      --btn-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%);
-      --btn-text: #ffffff;
-      --btn-border: rgba(255, 255, 255, 0.4);
-
-      --recom-bg: rgba(0, 0, 0, 0.25);
-      --recom-border: rgba(255, 255, 255, 0.1);
+      --bg-dark: #0B0F19;
+      --card-bg: rgba(23, 31, 51, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --accent-blue: #3B82F6;
+      --accent-purple: #8B5CF6;
+      --gradient-accent: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
     }
 
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 30%, #e0e7ff 70%, #c7d2fe 100%);
-        --orb1-bg: radial-gradient(circle, rgba(96, 165, 250, 0.6) 0%, rgba(147, 197, 253, 0.3) 100%);
-        --orb2-bg: radial-gradient(circle, rgba(232, 121, 249, 0.5) 0%, rgba(244, 114, 182, 0.3) 100%);
-
-        --glass-bg: rgba(255, 255, 255, 0.45);
-        --glass-border: rgba(255, 255, 255, 0.8);
-        --glass-border-top: rgba(255, 255, 255, 0.95);
-        --glass-border-left: rgba(255, 255, 255, 0.9);
-        --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.9), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-
-        --text-main: #1e293b;
-        --text-sub: #475569;
-        --label-text: #334155;
-
-        --btn-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(29, 78, 216, 0.95) 100%);
-        --btn-text: #ffffff;
-        --btn-border: rgba(255, 255, 255, 0.6);
-
-        --recom-bg: rgba(255, 255, 255, 0.5);
-        --recom-border: rgba(255, 255, 255, 0.6);
-      }
-    }
-    
-    body { 
-      background: var(--bg-gradient);
-      color: var(--text-main); 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh; 
-      padding: 20px; 
-      position: relative;
-      overflow-x: hidden;
-      transition: background 0.5s ease;
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
-    body::before, body::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(70px);
-      z-index: 0;
-      animation: float 10s ease-in-out infinite alternate;
-      transition: background 0.5s ease;
-    }
-    body::before {
-      width: 320px;
-      height: 320px;
-      background: var(--orb1-bg);
-      top: 10%;
-      left: 10%;
-    }
-    body::after {
-      width: 380px;
-      height: 380px;
-      background: var(--orb2-bg);
-      bottom: 5%;
-      right: 10%;
-      animation-delay: -5s;
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(16px);
     }
 
-    @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, 40px) scale(1.1); }
-    }
-
-    .container { 
-      position: relative;
-      z-index: 1;
-      background: var(--glass-bg); 
-      backdrop-filter: blur(28px) saturate(210%);
-      -webkit-backdrop-filter: blur(28px) saturate(210%);
-      border: 1px solid var(--glass-border);
-      border-top: 1px solid var(--glass-border-top);
-      border-left: 1px solid var(--glass-border-left);
-      padding: 32px; 
-      border-radius: 28px; 
-      box-shadow: var(--glass-shadow); 
-      max-width: 550px; 
-      width: 100%; 
-      transition: all 0.5s ease;
-    }
-
-    h1 { 
-      font-size: 2rem; 
-      font-weight: 700;
-      margin-bottom: 8px; 
-      color: var(--text-main); 
-      text-align: center; 
-      letter-spacing: -0.6px;
-    }
-    
-    p.subtitle { 
-      font-size: 0.95rem; 
-      font-weight: 400;
-      color: var(--text-sub); 
-      text-align: center; 
-      margin-bottom: 24px; 
-      letter-spacing: -0.2px;
-    }
-
-    .form-group { margin-bottom: 18px; }
-    
-    label { 
-      display: block; 
-      font-weight: 600; 
-      margin-bottom: 8px; 
-      font-size: 0.88rem; 
-      color: var(--label-text);
-      letter-spacing: -0.1px;
-    }
-
-    select, input { 
-      -webkit-appearance: none !important;
-      -moz-appearance: none !important;
-      appearance: none !important;
-      width: 100% !important; 
-      padding: 14px 16px !important; 
-      background-color: #1e293b !important;
-      border: 1px solid rgba(255, 255, 255, 0.3) !important; 
-      border-radius: 14px !important; 
-      font-size: 16px !important; 
-      font-weight: 500 !important;
-      color: #ffffff !important; 
-      outline: none !important; 
-      box-shadow: none !important;
-      letter-spacing: -0.2px;
-    }
-
-    @media (prefers-color-scheme: light) {
-      select, input {
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        color: #0f172a !important;
-      }
-    }
-
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover, 
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:active {
-      -webkit-text-fill-color: #ffffff !important;
-      -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
-      transition: background-color 5000s ease-in-out 0s;
-    }
-
-    input::placeholder {
-      color: #94a3b8 !important;
-      opacity: 1 !important;
-    }
-
-    select option {
-      background-color: #0f172a !important;
-      color: #ffffff !important;
-    }
-
-    select:focus, input:focus { 
-      border-color: #3b82f6 !important; 
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4) !important;
-    }
-
-    button { 
-      -webkit-appearance: none;
-      width: 100%; 
-      padding: 15px; 
-      background: var(--btn-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: var(--btn-text); 
-      border: 1px solid var(--btn-border); 
-      border-radius: 14px; 
-      font-size: 1rem; 
-      font-weight: 600; 
-      cursor: pointer; 
-      margin-top: 12px; 
-      transition: all 0.3s ease; 
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
-      letter-spacing: -0.2px;
-    }
-
-    button:hover { 
-      filter: brightness(1.1);
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.7);
-      transform: translateY(-2px);
-    }
-
-    .error-card {
-      margin-top: 24px;
-      padding: 18px;
-      border-radius: 18px;
-      display: none;
-      background-color: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.5);
-      color: #ef4444;
-      font-weight: 600;
+    .header {
       text-align: center;
-      animation: fadeIn 0.4s ease-out;
+      margin-bottom: 28px;
     }
 
-    .result-card { 
-      margin-top: 24px; 
-      padding: 22px; 
-      border-radius: 18px; 
-      display: none; 
-      animation: fadeIn 0.4s ease-out; 
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
     }
 
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(12px); } 
-      to { opacity: 1; transform: translateY(0); } 
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
 
-    .status-badge { 
-      display: inline-block; 
-      padding: 6px 14px; 
-      border-radius: 20px; 
-      font-weight: 700; 
-      font-size: 0.8rem; 
-      margin-bottom: 12px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.6px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    .status-keep { background-color: rgba(34, 197, 94, 0.25); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.5); }
-    .status-upgrade { background-color: rgba(234, 179, 8, 0.25); color: #ca8a04; border: 1px solid rgba(234, 179, 8, 0.5); }
-    .status-replace { background-color: rgba(239, 68, 68, 0.25); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.5); }
-
-    @media (prefers-color-scheme: dark) {
-      .status-keep { color: #4ade80; }
-      .status-upgrade { color: #fde047; }
-      .status-replace { color: #fca5a5; }
-      .error-card { color: #fca5a5; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .result-card h3 { margin-bottom: 10px; font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.3px; }
-    .result-card p { font-size: 0.93rem; font-weight: 400; line-height: 1.5; color: var(--text-sub); margin-bottom: 12px; }
-
-    .condition-box {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--recom-border);
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s ease;
     }
 
-    .condition-box h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; color: var(--text-main); }
-    .condition-box p { font-size: 0.88rem; margin-bottom: 0; }
-
-    .recommendations { 
-      margin-top: 14px; 
-      background: var(--recom-bg); 
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 14px; 
-      border-radius: 14px; 
-      border-left: 4px solid #2563eb; 
-      border-top: 1px solid var(--recom-border);
+    .form-control:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
-    .recommendations h4 { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); letter-spacing: -0.2px; }
-    .recommendations ul { list-style: none; }
-    .recommendations li { font-size: 0.88rem; font-weight: 400; padding: 4px 0; color: var(--text-sub); }
+    select.form-control option {
+      background-color: #111827;
+      color: var(--text-main);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient-accent);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Card di Risultato ed Errore */
+    .card-result, .card-error {
+      display: none;
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .card-error {
+      background-color: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .status-replace { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .status-upgrade { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+    .status-keep { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+    .result-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .result-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .info-section {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .info-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .recommendations-list {
+      list-style: none;
+      margin-top: 8px;
+    }
+
+    .recommendations-list li {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Tech advisor</h1>
-    <p class="subtitle">Scopri se è ora di cambiare il tuo dispositivo e cosa comprare con il tuo budget.</p>
+    <div class="header">
+      <h1>Tech Advisor</h1>
+      <p>Scopri se è ora di cambiare il tuo dispositivo e cosa comprare con il tuo budget.</p>
+    </div>
 
     <form id="techForm">
       <div class="form-group">
         <label for="category">Tipo di Dispositivo</label>
-        <select id="category" required>
+        <select id="category" class="form-control" required>
           <option value="" disabled selected>Seleziona una categoria</option>
           <option value="smartphone">Smartphone</option>
           <option value="tablet">Tablet</option>
@@ -338,20 +239,20 @@
 
       <div class="form-group">
         <label for="model">Modello esatto</label>
-        <input type="text" id="model" placeholder="Es. Redmagic 9 Pro, Huawei P30 Lite, JBL GO 3..." required>
+        <input type="text" id="model" class="form-control" placeholder="Es. Redmi Note 13 Pro, iPhone 12, JBL GO 3..." required>
       </div>
 
       <div class="form-group">
         <label for="year">Anno di acquisto (approssimativo)</label>
-        <input type="number" id="year" placeholder="Es. 2019" min="2000" max="2026" required>
+        <input type="number" id="year" class="form-control" placeholder="Es. 2021" min="2000" max="2026" required>
       </div>
 
       <div class="form-group">
         <label for="condition">Condizioni del Dispositivo</label>
-        <select id="condition" required>
+        <select id="condition" class="form-control" required>
           <option value="" disabled selected>Seleziona le condizioni attuali</option>
           <option value="excellent">Come nuovo (Nessun graffio, batteria ottima)</option>
-          <option value="good">Buono (Lievi segni d'usura, batteria ok)</option>
+          <option value="good">Buono (Lievi segni d'usura, batteria OK)</option>
           <option value="fair">Discreto (Graffi evidenti o batteria usurata)</option>
           <option value="damaged">Danneggiato (Schermo/Vetro rotto o problemi hardware)</option>
         </select>
@@ -359,27 +260,27 @@
 
       <div class="form-group">
         <label for="budget">Il tuo Budget (€)</label>
-        <input type="number" id="budget" placeholder="Es. 250" min="10" required>
+        <input type="number" id="budget" class="form-control" placeholder="Es. 250" min="0" required>
       </div>
 
-      <button type="submit" id="submitBtn">Valuta Dispositivo</button>
+      <button type="submit" class="btn-submit">Valuta Dispositivo</button>
     </form>
 
-    <div id="errorCard" class="error-card"></div>
+    <div id="errorCard" class="card-error"></div>
 
-    <div id="resultCard" class="result-card">
-      <span id="statusBadge" class="status-badge"></span>
-      <h3 id="resultTitle"></h3>
-      <p id="resultDescription"></p>
+    <div id="resultCard" class="card-result">
+      <div id="statusBadge" class="status-badge"></div>
+      <h2 id="resultTitle" class="result-title"></h2>
+      <p id="resultDescription" class="result-desc"></p>
 
-      <div class="condition-box">
-        <h4 id="conditionTitle">Valutazione Stato Fisico:</h4>
-        <p id="conditionDescription"></p>
+      <div class="info-section">
+        <div id="conditionTitle" class="info-title"></div>
+        <div id="conditionDescription" class="info-body"></div>
       </div>
 
-      <div class="recommendations">
-        <h4>Consigli per il tuo budget:</h4>
-        <ul id="recommendationsList"></ul>
+      <div class="info-section">
+        <div class="info-title">I nostri consigli per il tuo budget:</div>
+        <ul id="recommendationsList" class="recommendations-list"></ul>
       </div>
     </div>
   </div>
@@ -391,7 +292,7 @@
       "pixel", "motorola", "moto", "sony", "jbl", "lenovo", "asus", "nokia", 
       "nothing", "cmf", "soundcore", "marshall", "bose", "apple", "watch", 
       "fitbit", "amazfit", "garmin", "lg", "tcl", "zte", "alcatel", "redmagic", 
-      "nubia", "rog", "black shark", "meizu", "infinix", "tecno", "iqoo", "18 8"
+      "nubia", "rog", "black shark", "meizu", "infinix", "tecno", "iqoo"
     ];
 
     const recommendationsDB = {
@@ -399,7 +300,7 @@
         { maxBudget: 150, options: ["Redmi Note 13", "POCO M6"] },
         { maxBudget: 300, options: ["Samsung Galaxy A35", "Nothing Phone (2a)", "Redmi Note 13 Pro"] },
         { maxBudget: 600, options: ["Google Pixel 8a", "Samsung Galaxy S23", "Xiaomi 13T"] },
-        { maxBudget: Infinity, options: ["iPhone 15/17", "Samsung Galaxy S24 Ultra", "Google Pixel 11 Pro"] }
+        { maxBudget: Infinity, options: ["iPhone 15/17", "Samsung Galaxy S24 Ultra", "Google Pixel 9 Pro"] }
       ],
       tablet: [
         { maxBudget: 150, options: ["Redmi Pad SE", "Lenovo Tab M11"] },
@@ -420,7 +321,6 @@
 
     function getMinReleaseYear(model, category) {
       const m = model.toLowerCase();
-      if (m.includes("18 8")) return 2000;
       if (m.includes("iphone 17")) return 2025;
       if (m.includes("iphone 16")) return 2024;
       if (m.includes("iphone 15")) return 2023;
@@ -451,8 +351,13 @@
       return 2000;
     }
 
-    // Hash invisibile per l'Easter Egg
-    const _secretHash = "RG9uZSBpcyBiZXR0ZXIgdGhhbiBwZXJmZWN04oCUanVzdCBsaWtlIHRoaXMgc2l0ZS4=";
+    // Parametri segreti criptati in Base64 (Censura completa nel codice sorgente)
+    const _eCat = "c21hcnRwaG9uZQ=="; // smartphone
+    const _eMod = "MTggOA==";           // 18 8
+    const _eYr = 2017;                  // 2017
+    const _eCND = "ZGFtYWdlZA==";       // damaged
+    const _eBgt = 1817;                 // 1817
+    const _eMsg = "RG9uZSBpcyBiZXR0ZXIgdGhhbiBwZXJmZWN04oCUanVzdCBsaWtlIHRoaXMgc2l0ZS4=";
 
     document.getElementById('techForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -467,22 +372,28 @@
       const resultCard = document.getElementById('resultCard');
       const modelLower = model.toLowerCase();
 
-      // EASTER EGG INVISIBILE
-      if (category === 'smartphone' && modelLower === '18 8' && year === 2017 && condition === 'damaged' && budget === 1817) {
+      // --- 1. VERIFICA EASTER EGG (Invisibile e criptato) ---
+      if (category === atob(_eCat) && 
+          modelLower === atob(_eMod) && 
+          year === _eYr && 
+          condition === atob(_eCND) && 
+          budget === _eBgt) {
+        
         resultCard.style.display = 'none';
-        errorCard.textContent = atob(_secretHash);
+        errorCard.textContent = atob(_eMsg);
         errorCard.style.display = 'block';
         errorCard.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
         errorCard.style.borderColor = 'rgba(59, 130, 246, 0.5)';
         errorCard.style.color = '#60a5fa';
-        return;
-      } else {
-        errorCard.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-        errorCard.style.borderColor = 'rgba(239, 68, 68, 0.5)';
-        errorCard.style.color = '#ef4444';
+        return; // Interrompe il form mostrando solo l'Easter Egg
       }
 
-      // 1. Controllo Marca Valida
+      // Ripristino stili standard per gli errori normali
+      errorCard.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+      errorCard.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+      errorCard.style.color = '#fca5a5';
+
+      // --- 2. CONTROLLO VALIDITÀ MARCA ---
       const isBrandValid = extendedBrands.some(brand => modelLower.includes(brand)) || modelLower.length > 3;
 
       if (!isBrandValid) {
@@ -492,7 +403,7 @@
         return;
       }
 
-      // 2. Controllo Anno
+      // --- 3. CONTROLLO ANNO RILASCIO ---
       const minReleaseYear = getMinReleaseYear(model, category);
       if (year < minReleaseYear) {
         resultCard.style.display = 'none';
@@ -501,8 +412,10 @@
         return;
       }
 
+      // Nasconde eventuali errori precedenti
       errorCard.style.display = 'none';
 
+      // --- 4. CALCOLO VALUTAZIONE E CONSIGLI PER DISPOSITIVI NORMALI ---
       const currentYear = new Date().getFullYear();
       const age = currentYear - year;
 
@@ -533,9 +446,45 @@
         statusText = 'È Ancora Buono!';
         statusClass = 'status-keep';
         title = `${model} è molto valido`;
-        description = `Ha circa ${age} anni ed è mantenuto molto bene! Ti consigliamo di tenertelo ancora strettamente o rivenderlo a un ottimo prezzo se desideri fare un upgrade.`;
+        description = `Ha circa ${age} anni ed è mantenuto molto bene! Ti consigliamo di tenertelo ancora o rivenderlo a un ottimo prezzo se desideri fare un upgrade.`;
       }
 
       switch(condition) {
         case 'excellent':
-          condD
+          condDesc = '✨ <b>Stato Perfetto:</b> Puoi ottenere il massimo valore di permuta/usato se decidi di venderlo oggi stesso.';
+          break;
+        case 'good':
+          condDesc = '👍 <b>Buono Stato:</b> Presenta una normale usura del tempo. Funzionamento ottimale senza costi aggiuntivi di riparazione.';
+          break;
+        case 'fair':
+          condDesc = '⚠️ <b>Stato Discreto:</b> La batteria o l\'estetica necessitano attenzione. Valuta se spendere per ripararlo o mettere quei soldi nel nuovo budget.';
+          break;
+        case 'damaged':
+          condDesc = '🛠️ <b>Danneggiato:</b> Il costo del ricambio (schermo/hardware) spesso supera il valore residuo del dispositivo stesso.';
+          break;
+      }
+
+      resultCard.style.display = 'block';
+      resultCard.style.backgroundColor = statusClass === 'status-keep' ? 'rgba(34, 197, 94, 0.15)' : (statusClass === 'status-upgrade' ? 'rgba(234, 179, 8, 0.15)' : 'rgba(239, 68, 68, 0.15)');
+      statusBadge.className = `status-badge ${statusClass}`;
+      statusBadge.textContent = statusText;
+      resultTitle.textContent = title;
+      resultDescription.textContent = description;
+
+      conditionTitle.textContent = "Valutazione Condizioni:";
+      conditionDescription.innerHTML = condDesc;
+
+      recommendationsList.innerHTML = '';
+      const catDB = recommendationsDB[category] || recommendationsDB.smartphone;
+      const matchedTier = catDB.find(tier => budget <= tier.maxBudget) || catDB[catDB.length - 1];
+
+      matchedTier.options.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `• ${item}`;
+        recommendationsList.appendChild(li);
+      });
+    });
+  </script>
+</body>
+          </html>
+          
